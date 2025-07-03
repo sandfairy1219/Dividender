@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useExchangeRate } from '@/hooks/useExchangeRate';
 import { DividendCard } from '@/types/dividend';
-import { calculateAnnualDividend, formatCurrency, getFrequencyLabel} from '@/utils/calculations';
+import { calculateAnnualDividend, formatCurrency, getFrequencyLabel } from '@/utils/calculations';
 
 interface DividendCardProps {
   card: DividendCard;
@@ -35,7 +35,6 @@ function DividendCardComponent({ card, onUpdate, onDelete }: DividendCardProps) 
   };
 
   const annualDividend = calculateAnnualDividend(card);
-
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">

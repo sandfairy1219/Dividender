@@ -21,29 +21,16 @@ export function calculateAnnualDividend(card: DividendCard): number {
 /**
  * 개별 카드의 수익률 계산
  */
-export function calculateCardYieldRate(card: DividendCard): number {
-  const totalInvestment = card.stockPrice * card.shares;
-  const annualDividend = calculateAnnualDividend(card);
-  return totalInvestment > 0 ? (annualDividend / totalInvestment) * 100 : 0;
-}
 
 /**
- * 전체 카드들의 총 배당금 및 수익률 계산
+ * 전체 카드들의 총 배당금 계산
  */
 export function calculateTotalDividends(cards: DividendCard[]) {
-  const totalPreTaxUSD = cards.reduce((sum, card) => sum + calculateAnnualDividend(card), 0);
+  const totalPreTaxUSD = cards.reduce((sum: number, card: DividendCard) => sum + calculateAnnualDividend(card), 0);
   const totalPostTaxUSD = totalPreTaxUSD * (1 - TAX_RATE);
-  
-  // 총 투자금액 계산 (주식 가격 * 주식 수량의 합)
-  const totalInvestment = cards.reduce((sum, card) => sum + (card.stockPrice * card.shares), 0);
-  
-  // 세전 수익률 계산 (연간 배당금 / 총 투자금액 * 100)
-  const yieldRate = totalInvestment > 0 ? (totalPreTaxUSD / totalInvestment) * 100 : 0;
-  
   return {
     preTaxUSD: totalPreTaxUSD,
     postTaxUSD: totalPostTaxUSD,
-    yieldRate,
   };
 }
 

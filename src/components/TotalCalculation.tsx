@@ -10,7 +10,7 @@ interface TotalCalculationProps {
 }
 
 function TotalCalculation({ cards, exchangeRate, isLoadingRate }: TotalCalculationProps) {
-  const { preTaxUSD, postTaxUSD, yieldRate } = calculateTotalDividends(cards);
+  const { preTaxUSD, postTaxUSD } = calculateTotalDividends(cards);
   const preTaxKRW = convertUSDToKRW(preTaxUSD, exchangeRate);
   const postTaxKRW = convertUSDToKRW(postTaxUSD, exchangeRate);
 
@@ -52,12 +52,7 @@ function TotalCalculation({ cards, exchangeRate, isLoadingRate }: TotalCalculati
                 {formatCurrency(postTaxUSD, 'USD')}
               </span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
-              <span className="text-gray-700 dark:text-gray-300">세전 수익률:</span>
-              <span className="font-bold text-purple-600 dark:text-purple-400 text-lg">
-                {yieldRate.toFixed(2)}%
-              </span>
-            </div>
+            {/* 세전 수익률 항목 제거됨 */}
             <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
               (배당소득세 15% 적용)
             </div>
@@ -100,12 +95,7 @@ function TotalCalculation({ cards, exchangeRate, isLoadingRate }: TotalCalculati
             </div>
             <div className="text-sm text-gray-600 dark:text-gray-400">총 주식 수</div>
           </div>
-          <div>
-            <div className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-              {preTaxUSD > 0 ? ((postTaxUSD / preTaxUSD) * 100).toFixed(1) : 0}%
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">세후 수익률</div>
-          </div>
+          {/* 세후 수익률 제거됨 */}
         </div>
       </div>
     </div>
