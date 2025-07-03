@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useExchangeRate } from '@/hooks/useExchangeRate';
 import { DividendCard } from '@/types/dividend';
 import { calculateAnnualDividend, formatCurrency, getFrequencyLabel, calculateCardYieldRate } from '@/utils/calculations';
 
@@ -10,8 +11,11 @@ interface DividendCardProps {
   onDelete: (id: string) => void;
 }
 
+
 function DividendCardComponent({ card, onUpdate, onDelete }: DividendCardProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [inputCurrency, setInputCurrency] = useState<'USD' | 'KRW'>('USD');
+  const { exchangeRate } = useExchangeRate();
 
   const handleNameChange = (name: string) => {
     onUpdate({ ...card, name });
@@ -19,6 +23,15 @@ function DividendCardComponent({ card, onUpdate, onDelete }: DividendCardProps) 
 
   const handleFieldChange = (field: keyof DividendCard, value: string | number) => {
     onUpdate({ ...card, [field]: value });
+  };
+
+  // 배당금 입력 핸들러 (통화 변환 지원)
+  const handleAmountChange = (value: string) => {
+    let amount = parseFloat(value) || 0;
+    if (inputCurrency === 'KRW') {
+      amount = amount / exchangeRate;
+    }
+    onUpdate({ ...card, amountPerPayment: amount });
   };
 
   const annualDividend = calculateAnnualDividend(card);
@@ -60,17 +73,28 @@ function DividendCardComponent({ card, onUpdate, onDelete }: DividendCardProps) 
       {/* 입력 필드들 */}
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            1회당 배당금 (USD)
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-2">
+            1회당 배당금
+            <button
+              type="button"
+              className={`px-2 py-0.5 rounded text-xs font-semibold border border-blue-500 ml-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors ${inputCurrency === 'USD' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-300'}`}
+              onClick={() => setInputCurrency(inputCurrency === 'USD' ? 'KRW' : 'USD')}
+              title="입력 통화 전환"
+            >
+              {inputCurrency === 'USD' ? 'USD' : 'KRW'}
+            </button>
           </label>
           <input
             type="number"
             step="0.01"
-            value={card.amountPerPayment}
-            onChange={(e) => handleFieldChange('amountPerPayment', parseFloat(e.target.value) || 0)}
+            value={inputCurrency === 'USD' ? card.amountPerPayment : Math.round(card.amountPerPayment * exchangeRate * 100) / 100}
+            onChange={(e) => handleAmountChange(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            placeholder="0.00"
+            placeholder={inputCurrency === 'USD' ? '0.00' : '0'}
           />
+          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
+            {inputCurrency === 'USD' ? '달러로 입력' : '원화로 입력 (자동 환산)'}
+          </span>
         </div>
 
         <div>
@@ -110,12 +134,6 @@ function DividendCardComponent({ card, onUpdate, onDelete }: DividendCardProps) 
             <span className="text-sm text-gray-600 dark:text-gray-400">연간 예상 배당금:</span>
             <span className="font-semibold text-green-600 dark:text-green-400">
               {formatCurrency(annualDividend, 'USD')}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-600 dark:text-gray-400">세전 수익률:</span>
-            <span className="font-semibold text-blue-600 dark:text-blue-400">
-              {yieldRate.toFixed(2)}%
             </span>
           </div>
           <div className="flex justify-between items-center mt-1">
