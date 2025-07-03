@@ -5,7 +5,6 @@ import { DividendCard } from '@/types/dividend';
 import { useExchangeRate } from '@/hooks/useExchangeRate';
 import DividendCardComponent from '@/components/DividendCard';
 import TotalCalculation from '@/components/TotalCalculation';
-import DarkModeToggle from '@/components/DarkModeToggle';
 
 export default function Home() {
   const [cards, setCards] = useState<DividendCard[]>([]);
@@ -85,7 +84,7 @@ export default function Home() {
               </svg>
             </div>
             <h3 className="text-xl font-medium text-gray-500 dark:text-gray-400 mb-2">아직 추가된 종목이 없습니다</h3>
-            <p className="text-gray-400 dark:text-gray-500 mb-6">위의 "종목 추가" 버튼을 클릭하여 배당 주식을 추가해보세요</p>
+            <p className="text-gray-400 dark:text-gray-500 mb-6">위의 &quot;종목 추가&quot; 버튼을 클릭하여 배당 주식을 추가해보세요</p>
           </div>
         )}
 
