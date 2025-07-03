@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useExchangeRate } from '@/hooks/useExchangeRate';
 import { DividendCard } from '@/types/dividend';
-import { calculateAnnualDividend, formatCurrency, getFrequencyLabel, calculateCardYieldRate } from '@/utils/calculations';
+import { calculateAnnualDividend, formatCurrency, getFrequencyLabel} from '@/utils/calculations';
 
 interface DividendCardProps {
   card: DividendCard;
