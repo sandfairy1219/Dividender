@@ -35,7 +35,7 @@ export default function Home() {
       <div className="max-w-6xl mx-auto px-4">
         {/* 헤더 */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-2">Dividender</h1>
+          <h1 className="text-4xl font-bold text-white-800 dark:text-white-200 mb-2">Dividender</h1>
                   </div>
 
         {/* 카드 추가 버튼 */}
